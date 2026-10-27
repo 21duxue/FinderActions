@@ -2,9 +2,11 @@
 set -euo pipefail
 
 ROOT="${0:A:h:h}"
+cd "$ROOT"
+
 CONFIGURATION="${1:-release}"
 VERSION="${VERSION:-0.1.3}"
-BUILD_DIR="$ROOT/.build/$CONFIGURATION"
+BIN_DIR="$(swift build -c "$CONFIGURATION" --show-bin-path)"
 APP_NAME="FinderActions"
 APP_BUNDLE="$ROOT/build/$APP_NAME.app"
 EXTENSION_NAME="FinderActionsExtension"
@@ -22,7 +24,7 @@ mkdir -p "$APP_BUNDLE/Contents/Resources"
 cp "$ROOT/Resources/AppIcon.icns" "$APP_BUNDLE/Contents/Resources/AppIcon.icns"
 mkdir -p "$EXTENSION_BUNDLE/Contents/MacOS"
 
-cp "$BUILD_DIR/$APP_NAME" "$APP_BUNDLE/Contents/MacOS/$APP_NAME"
+cp "$BIN_DIR/$APP_NAME" "$APP_BUNDLE/Contents/MacOS/$APP_NAME"
 
 xcrun swiftc \
   -swift-version 5 \
@@ -32,14 +34,14 @@ xcrun swiftc \
   -module-name "$EXTENSION_NAME" \
   -parse-as-library \
   -application-extension \
-  -I "$ROOT/.build/out/Products/${(C)CONFIGURATION}" \
-  -L "$ROOT/.build/out/Products/${(C)CONFIGURATION}" \
+  -I "$BIN_DIR" \
+  -L "$BIN_DIR" \
   -framework Cocoa \
   -framework FinderSync \
   -Xlinker -e \
   -Xlinker _NSExtensionMain \
   "$ROOT/Sources/$EXTENSION_NAME"/*.swift \
-  "$ROOT/.build/out/Products/${(C)CONFIGURATION}/libFinderActionsCore.a" \
+  "$BIN_DIR/libFinderActionsCore.a" \
   -o "$EXTENSION_BUNDLE/Contents/MacOS/$EXTENSION_NAME"
 
 cat > "$APP_BUNDLE/Contents/Info.plist" <<PLIST
