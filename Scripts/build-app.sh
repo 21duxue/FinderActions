@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT="${0:A:h:h}"
 CONFIGURATION="${1:-release}"
-VERSION="${VERSION:-0.1.2}"
+VERSION="${VERSION:-0.1.3}"
 BUILD_DIR="$ROOT/.build/$CONFIGURATION"
 APP_NAME="FinderActions"
 APP_BUNDLE="$ROOT/build/$APP_NAME.app"
@@ -93,6 +93,8 @@ cat > "$EXTENSION_BUNDLE/Contents/Info.plist" <<PLIST
 <dict>
     <key>CFBundleDevelopmentRegion</key>
     <string>zh_CN</string>
+    <key>CFBundleDisplayName</key>
+    <string>FinderActions Finder Sync</string>
     <key>CFBundleExecutable</key>
     <string>FinderActionsExtension</string>
     <key>CFBundleIdentifier</key>
@@ -107,8 +109,14 @@ cat > "$EXTENSION_BUNDLE/Contents/Info.plist" <<PLIST
     <string>${VERSION}</string>
     <key>CFBundleVersion</key>
     <string>1</string>
+    <key>LSUIElement</key>
+    <true/>
+    <key>NSPrincipalClass</key>
+    <string>NSApplication</string>
     <key>NSExtension</key>
     <dict>
+        <key>NSExtensionAttributes</key>
+        <dict/>
         <key>NSExtensionPointIdentifier</key>
         <string>com.apple.FinderSync</string>
         <key>NSExtensionPrincipalClass</key>

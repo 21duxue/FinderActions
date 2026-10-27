@@ -38,3 +38,9 @@ Initial public release.
 
 - Fixed the Dock icon still appearing when running as a menu bar app.
 - FinderActions now uses accessory activation policy and remains visible only in the menu bar.
+
+## v0.1.3
+
+- Fixed the Finder Sync extension not appearing in Finder.
+- Added missing extension Info.plist keys required by Finder.
+- Enabled the extension to stay running and respond to context-menu requests.
