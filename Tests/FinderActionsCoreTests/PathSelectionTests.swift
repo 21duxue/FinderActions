@@ -14,7 +14,7 @@ struct PathSelectionTests {
         let selection = PathSelection(target: target, selectedItems: selected)
 
         #expect(selection.effectiveItems == selected)
-        #expect(selection.effectiveDirectory == URL(fileURLWithPath: "/Users/example/Project"))
+        #expect(selection.effectiveDirectory?.standardizedFileURL.path == "/Users/example/Project")
     }
 
     @Test

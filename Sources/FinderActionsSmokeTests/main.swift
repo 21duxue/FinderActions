@@ -33,6 +33,7 @@ let selection = PathSelection(
         URL(fileURLWithPath: "/tmp/FinderActions/Sources")
     ]
 )
+expect(selection.effectiveDirectory?.standardizedFileURL.path == "/tmp/FinderActions", "selected file resolves to containing directory")
 expect(CopiedText.paths(from: selection) == "/tmp/FinderActions/README.md\n/tmp/FinderActions/Sources", "paths are newline separated")
 expect(CopiedText.names(from: selection) == "README.md\nSources", "names are newline separated")
 
