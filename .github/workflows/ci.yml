@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: macos-15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Swift version
+        run: swift --version
+
+      - name: Build
+        run: swift build
+
+      - name: Swift Testing
+        run: swift test
+
+      - name: Smoke tests
+        run: swift run FinderActionsSmokeTests
+
+      - name: Build app bundle
+        run: ./Scripts/build-app.sh release
+
+      - name: Verify signature
+        run: codesign --verify --deep --strict build/FinderActions.app

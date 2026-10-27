@@ -1,0 +1,1110 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FinderActions · App Preview</title>
+<style>
+  :root {
+    --bg: #f4f5f7;
+    --window: #ffffff;
+    --panel: #fafafa;
+    --panel-2: #f2f3f5;
+    --line: #dcdfe4;
+    --line-soft: #e8eaee;
+    --line-strong: #c7ccd3;
+    --ink: #1d2024;
+    --ink-2: #565d67;
+    --ink-3: #7d848e;
+    --accent: #0f766e;
+    --accent-soft: #e7f4f1;
+    --accent-line: #a5d3cc;
+    --ok: #15803d;
+    --ok-soft: #eaf6ef;
+    --warn: #a16207;
+    --warn-soft: #fdf4e7;
+    --danger: #b91c1c;
+    --danger-soft: #fdeeee;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow-window: 0 1px 2px rgba(15, 18, 22, .05), 0 18px 42px rgba(15, 18, 22, .07);
+    --shadow-menu: 0 10px 26px rgba(15, 18, 22, .14);
+    color-scheme: light;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { margin: 0; min-height: 100%; }
+
+  body {
+    background:
+      radial-gradient(circle at 12% -10%, #ffffff 0%, transparent 42%),
+      radial-gradient(circle at 88% 0%, #eef1f4 0%, transparent 38%),
+      var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    letter-spacing: 0;
+  }
+
+  button, input { font: inherit; color: inherit; }
+
+  .page {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 36px 40px 56px;
+  }
+
+  .window {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-height: 640px;
+    background: var(--window);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-window);
+  }
+
+  .titlebar {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 14px;
+    height: 48px;
+    padding: 0 14px;
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg, #fbfbfc, #f4f5f7);
+  }
+
+  .traffic-lights { display: flex; gap: 7px; }
+
+  .traffic-lights span {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #d7dade;
+    border: 1px solid #c3c8ce;
+  }
+
+  .title-main {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .app-icon {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border: 1px solid #b6d9d3;
+    border-radius: 8px;
+    background: linear-gradient(145deg, #eef8f5, #d7ece8);
+    color: var(--accent);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.75);
+  }
+
+  .app-title {
+    font-size: 14px;
+    font-weight: 650;
+    color: var(--ink-2);
+    white-space: nowrap;
+  }
+
+  .lang-switch {
+    display: inline-flex;
+    padding: 3px;
+    border: 1px solid var(--line-strong);
+    border-radius: 9px;
+    background: var(--window);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.75);
+  }
+
+  .lang-switch button {
+    appearance: none;
+    border: 0;
+    border-radius: 6px;
+    padding: 3px 9px;
+    background: transparent;
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: background .16s ease, color .16s ease;
+  }
+
+  .lang-switch button[aria-pressed="true"] {
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 650;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 360px minmax(0, 1fr);
+    min-height: 0;
+  }
+
+  .settings {
+    padding: 20px;
+    border-right: 1px solid var(--line);
+    background: linear-gradient(180deg, #fbfbfc, #f7f8fa);
+    overflow: auto;
+  }
+
+  .section {
+    margin-bottom: 18px;
+    padding: 14px;
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius);
+    background: var(--window);
+    box-shadow: 0 1px 2px rgba(15,18,22,.03);
+  }
+
+  .section:last-child { margin-bottom: 0; }
+
+  .section-head {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 12px;
+  }
+
+  .section-icon {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    background: var(--panel);
+    color: var(--ink-2);
+  }
+
+  .section-title {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 650;
+    color: var(--ink-2);
+  }
+
+  .field { margin-bottom: 13px; }
+  .field:last-child { margin-bottom: 0; }
+
+  .field-label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 12px;
+    color: var(--ink-3);
+  }
+
+  .segmented {
+    display: flex;
+    padding: 3px;
+    border: 1px solid var(--line-strong);
+    border-radius: 9px;
+    background: var(--panel-2);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.65);
+  }
+
+  .segmented button {
+    flex: 1;
+    appearance: none;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 5px 8px;
+    background: transparent;
+    color: var(--ink-2);
+    font-size: 12px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background .16s ease, color .16s ease, border-color .16s ease;
+  }
+
+  .segmented button[aria-pressed="true"] {
+    background: var(--window);
+    border-color: var(--line);
+    color: var(--ink);
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(15,18,22,.05);
+  }
+
+  .action-list {
+    display: grid;
+    gap: 2px;
+    padding: 3px;
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius-sm);
+    background: var(--panel);
+  }
+
+  .action-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 7px 8px;
+    border-radius: 6px;
+  }
+
+  .action-row:hover { background: #f4f5f7; }
+
+  .action-name { font-size: 13px; color: var(--ink); }
+
+  .switch {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: #e5e7ea;
+    cursor: pointer;
+    padding: 0;
+    transition: background .16s ease, border-color .16s ease;
+  }
+
+  .switch::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--window);
+    border: 1px solid #c6cad0;
+    transition: transform .16s ease, border-color .16s ease;
+  }
+
+  .switch[aria-checked="true"] {
+    background: #34c759;
+    border-color: #249c48;
+  }
+
+  .switch[aria-checked="true"]::after {
+    transform: translateX(16px);
+    border-color: var(--accent);
+  }
+
+  .text-input {
+    width: 100%;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-sm);
+    background: var(--window);
+    padding: 7px 9px;
+    font-size: 13px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.65);
+  }
+
+  .text-input:focus { border-color: var(--accent-line); }
+
+  .status-card {
+    display: grid;
+    gap: 9px;
+    padding: 10px;
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius-sm);
+    background: var(--panel);
+  }
+
+  .status-line {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--ink-2);
+    font-size: 12px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    border: 1px solid #b9cfc2;
+    background: var(--ok-soft);
+    color: var(--ok);
+    padding: 1px 7px;
+    font-size: 11px;
+    font-weight: 650;
+  }
+
+  .button {
+    appearance: none;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-sm);
+    background: var(--window);
+    padding: 6px 11px;
+    font-size: 12px;
+    color: var(--ink-2);
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(15,18,22,.04);
+    transition: color .16s ease, border-color .16s ease, background .16s ease;
+  }
+
+  .button:hover {
+    color: var(--ink);
+    border-color: #adb3bb;
+    background: #fbfbfc;
+  }
+
+  .preview {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-width: 0;
+    background: #f8f9fa;
+    overflow: hidden;
+  }
+
+  .preview-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 13px 18px;
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg, #fbfbfc, #f5f6f8);
+  }
+
+  .preview-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 650;
+    color: var(--ink-2);
+  }
+
+  .preview-note { font-size: 12px; color: var(--ink-3); }
+
+  .finder {
+    position: relative;
+    display: grid;
+    grid-template-columns: 168px minmax(0, 1fr);
+    min-height: 0;
+    background: var(--window);
+  }
+
+  .finder-side {
+    padding: 13px 10px;
+    border-right: 1px solid var(--line);
+    background: linear-gradient(180deg, #fafafa, #f5f6f8);
+  }
+
+  .side-group + .side-group { margin-top: 16px; }
+
+  .side-title {
+    margin: 0 0 5px;
+    color: var(--ink-3);
+    font-size: 11px;
+  }
+
+  .side-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 7px;
+    border-radius: 6px;
+    color: var(--ink-2);
+    font-size: 12px;
+  }
+
+  .side-item.current {
+    color: var(--ink);
+    background: var(--accent-soft);
+    font-weight: 650;
+  }
+
+  .side-mark {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: .75;
+  }
+
+  .finder-main { padding: 16px; min-width: 0; }
+
+  .path {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--ink-3);
+    font-size: 12px;
+    margin-bottom: 14px;
+  }
+
+  .path strong { color: var(--ink-2); }
+
+  .file-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+    gap: 10px;
+  }
+
+  .file {
+    display: grid;
+    justify-items: center;
+    gap: 7px;
+    padding: 11px 6px 9px;
+    border-radius: var(--radius-sm);
+    color: var(--ink-2);
+    font-size: 12px;
+    text-align: center;
+  }
+
+  .file:hover { background: #f3f4f6; color: var(--ink); }
+
+  .file.new {
+    color: var(--accent);
+    background: var(--accent-soft);
+    border: 1px solid #b6d9d3;
+  }
+
+  .file-icon {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fafafa;
+    color: var(--ink-3);
+    font-size: 10px;
+    font-weight: 650;
+  }
+
+  .file.new .file-icon { background: #eef8f5; color: var(--accent); border-color: #b6d9d3; }
+
+  .file span {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .menu {
+    position: absolute;
+    top: 88px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 30;
+    min-width: 224px;
+    padding: 5px;
+    border: 1px solid #a8aeb6;
+    border-radius: var(--radius);
+    background: rgba(252,252,253,.98);
+    box-shadow: var(--shadow-menu);
+  }
+
+  .menu-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    width: 100%;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    padding: 6px 8px;
+    text-align: left;
+    color: var(--ink);
+    cursor: default;
+  }
+
+  .menu-item.parent { font-weight: 650; }
+
+  .menu-sub {
+    display: grid;
+    gap: 1px;
+    margin-left: 20px;
+  }
+
+  .overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(15,18,22,.18);
+  }
+
+  .overlay.open { display: flex; }
+
+  .sheet {
+    width: min(430px, 100%);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    background: var(--window);
+    overflow: hidden;
+    box-shadow: 0 20px 44px rgba(15,18,22,.16);
+  }
+
+  .sheet-head {
+    padding: 15px 16px;
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg, #fbfbfc, #f7f8fa);
+  }
+
+  .sheet-head h3 { margin: 0 0 3px; font-size: 15px; }
+  .sheet-head p { margin: 0; color: var(--ink-2); font-size: 12px; }
+
+  .sheet-body { padding: 16px; }
+
+  .field-error {
+    min-height: 18px;
+    margin-top: 8px;
+    color: var(--danger);
+    font-size: 12px;
+  }
+
+  .sheet-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 12px 16px;
+    border-top: 1px solid var(--line);
+    background: #f7f8fa;
+  }
+
+  .button.primary {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: #fff;
+    font-weight: 650;
+  }
+
+  .button.primary:hover { background: #0d6b64; border-color: #0d6b64; }
+
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 26px;
+    z-index: 120;
+    transform: translate(-50%, 8px);
+    opacity: 0;
+    pointer-events: none;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    background: #22262b;
+    color: #f5f6f7;
+    padding: 8px 13px;
+    font-size: 12px;
+    box-shadow: 0 8px 20px rgba(15,18,22,.16);
+    transition: transform .16s ease, opacity .16s ease;
+  }
+
+  .toast.show { transform: translate(-50%, 0); opacity: 1; }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+
+  @media (max-width: 980px) {
+    .page { padding: 22px 14px 42px; }
+    .layout { grid-template-columns: 1fr; }
+    .settings { border-right: 0; border-bottom: 1px solid var(--line); }
+    .finder { grid-template-columns: 1fr; }
+    .finder-side { display: none; }
+    .menu { position: static; transform: none; margin: 16px auto 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <section class="window" aria-label="FinderActions settings window">
+      <header class="titlebar">
+        <div class="traffic-lights">
+          <span></span><span></span><span></span>
+        </div>
+
+        <div class="title-main">
+          <span class="app-icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 16 16">
+              <path d="M2.5 5.3h11v6.7a1 1 0 0 1-1 1h-9a1 1 0 0 1-1-1V5.3Z" fill="#2f8f86"/>
+              <path d="M2.5 5.3 4.3 3h7.4l1.8 2.3H2.5Z" fill="#79bcb4"/>
+              <path d="M5.7 7.8h4.6v1H5.7z" fill="#123f3b"/>
+            </svg>
+          </span>
+          <span class="app-title">FinderActions</span>
+        </div>
+
+        <div class="lang-switch" role="group" aria-label="Language">
+          <button type="button" data-lang="zh" aria-pressed="true">中文</button>
+          <button type="button" data-lang="en" aria-pressed="false">English</button>
+        </div>
+      </header>
+
+      <div class="layout">
+        <aside class="settings">
+          <section class="section">
+            <div class="section-head">
+              <span class="section-icon" aria-hidden="true">
+                <svg width="13" height="13" viewBox="0 0 16 16"><path d="M3 4h10M3 8h10M3 12h6" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+              </span>
+              <h2 class="section-title" data-i18n="menuTitle">Finder 菜单</h2>
+            </div>
+
+            <div class="field">
+              <span class="field-label" data-i18n="menuMode">菜单显示方式</span>
+              <div class="segmented" id="menu-mode">
+                <button type="button" data-value="submenu" aria-pressed="true" data-i18n="submenuOption">折叠到 FinderActions</button>
+                <button type="button" data-value="flat" aria-pressed="false" data-i18n="flatOption">直接显示在右键菜单</button>
+              </div>
+            </div>
+
+            <div class="field">
+              <span class="field-label" data-i18n="actions">动作</span>
+              <div class="action-list" id="action-list"></div>
+            </div>
+          </section>
+
+          <section class="section">
+            <div class="section-head">
+              <span class="section-icon" aria-hidden="true">
+                <svg width="13" height="13" viewBox="0 0 16 16"><path d="M4 2h8v12H4z" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M6 5h4M6 8h4" stroke="currentColor" stroke-width="1.2"/></svg>
+              </span>
+              <h2 class="section-title" data-i18n="newFileTitle">新建文件</h2>
+            </div>
+
+            <div class="field">
+              <label class="field-label" for="default-name" data-i18n="defaultName">默认文件名</label>
+              <input class="text-input" id="default-name" value="Untitled.txt" spellcheck="false">
+            </div>
+          </section>
+
+          <section class="section">
+            <div class="section-head">
+              <span class="section-icon" aria-hidden="true">
+                <svg width="13" height="13" viewBox="0 0 16 16"><path d="M8 2l5 3v6l-5 3-5-3V5l5-3Z" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+              </span>
+              <h2 class="section-title" data-i18n="extensionTitle">Finder 扩展</h2>
+            </div>
+
+            <div class="status-card">
+              <div class="status-line">
+                <span class="badge" data-i18n="enabled">已启用</span>
+                <span data-i18n="extensionStatus">FinderActions extension is active</span>
+              </div>
+              <button class="button" type="button" id="open-extension-settings" data-i18n="openSettings">打开系统扩展设置</button>
+            </div>
+          </section>
+        </aside>
+
+        <section class="preview">
+          <header class="preview-head">
+            <div class="preview-title">
+              <svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M2 4h5l1.2 1.5H14V12H2V4Z" fill="none" stroke="currentColor" stroke-width="1.3"/>
+              </svg>
+              <span data-i18n="previewTitle">Finder 预览</span>
+            </div>
+            <span class="preview-note" data-i18n="previewNote">菜单会根据左侧设置实时变化</span>
+          </header>
+
+          <div class="finder">
+            <aside class="finder-side">
+              <div class="side-group">
+                <p class="side-title" data-i18n="favorites">个人收藏</p>
+                <div class="side-item"><span class="side-mark"></span>Air</div>
+                <div class="side-item current"><span class="side-mark"></span>项目</div>
+                <div class="side-item"><span class="side-mark"></span>文稿</div>
+              </div>
+              <div class="side-group">
+                <p class="side-title" data-i18n="locations">位置</p>
+                <div class="side-item"><span class="side-mark"></span>Macintosh HD</div>
+                <div class="side-item"><span class="side-mark"></span>iCloud Drive</div>
+              </div>
+            </aside>
+
+            <div class="finder-main">
+              <div class="path">
+                <span data-i18n="projects">项目</span>
+                <span>/</span>
+                <strong>FinderActions</strong>
+              </div>
+
+              <div class="file-grid" id="file-list"></div>
+
+              <div class="menu" id="context-menu" role="menu"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </div>
+
+  <div class="overlay" id="sheet-overlay">
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+      <div class="sheet-head">
+        <h3 id="sheet-title" data-i18n="newFileHere">在此新建文件</h3>
+        <p id="sheet-note" data-i18n="newFileNote">输入文件名后按回车。不会覆盖已有文件。</p>
+      </div>
+      <div class="sheet-body">
+        <label class="field-label" for="file-input" data-i18n="fileName">文件名</label>
+        <input class="text-input" id="file-input" value="Untitled.txt" spellcheck="false">
+        <div class="field-error" id="file-error" role="alert"></div>
+      </div>
+      <div class="sheet-actions">
+        <button class="button" type="button" id="cancel-file" data-i18n="cancel">取消</button>
+        <button class="button primary" type="button" id="create-file" data-i18n="create">创建文件</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const i18n = {
+      zh: {
+        menuTitle: 'Finder 菜单',
+        menuMode: '菜单显示方式',
+        submenuOption: '折叠到 FinderActions',
+        flatOption: '直接显示在右键菜单',
+        actions: '动作',
+        newFileTitle: '新建文件',
+        defaultName: '默认文件名',
+        extensionTitle: 'Finder 扩展',
+        enabled: '已启用',
+        extensionStatus: 'FinderActions 扩展已启用',
+        openSettings: '打开系统扩展设置',
+        previewTitle: 'Finder 预览',
+        previewNote: '菜单会根据左侧设置实时变化',
+        favorites: '个人收藏',
+        locations: '位置',
+        projects: '项目',
+        newFileHere: '在此新建文件',
+        newFileNote: '输入文件名后按回车。不会覆盖已有文件。',
+        fileName: '文件名',
+        cancel: '取消',
+        create: '创建文件',
+        menuItems: ['新建文件…', '在此打开终端', '复制路径', '复制名称'],
+        parent: 'FinderActions',
+        created: name => `已创建 ${name}`,
+        copiedPath: '已复制路径',
+        copiedName: '已复制名称',
+        openedTerminal: '已打开 Apple Terminal',
+        invalidEmpty: '请输入文件名。',
+        invalidSlash: '文件名不能包含“/”。',
+        invalidDot: '这个文件名被系统保留。'
+      },
+      en: {
+        menuTitle: 'Finder menu',
+        menuMode: 'Menu display',
+        submenuOption: 'Group under FinderActions',
+        flatOption: 'Show directly in context menu',
+        actions: 'Actions',
+        newFileTitle: 'New file',
+        defaultName: 'Default file name',
+        extensionTitle: 'Finder extension',
+        enabled: 'Enabled',
+        extensionStatus: 'FinderActions extension is active',
+        openSettings: 'Open system extension settings',
+        previewTitle: 'Finder preview',
+        previewNote: 'The menu updates with the settings on the left',
+        favorites: 'Favorites',
+        locations: 'Locations',
+        projects: 'Projects',
+        newFileHere: 'New file here',
+        newFileNote: 'Press Enter after typing a file name. Existing files are not overwritten.',
+        fileName: 'File name',
+        cancel: 'Cancel',
+        create: 'Create file',
+        menuItems: ['New File…', 'Open Terminal Here', 'Copy Path', 'Copy Name'],
+        parent: 'FinderActions',
+        created: name => `Created ${name}`,
+        copiedPath: 'Path copied',
+        copiedName: 'Name copied',
+        openedTerminal: 'Opened Apple Terminal',
+        invalidEmpty: 'Enter a file name.',
+        invalidSlash: 'File names cannot contain “/”.',
+        invalidDot: 'This name is reserved by the system.'
+      }
+    };
+
+    const state = {
+      lang: 'zh',
+      menuMode: 'submenu',
+      actions: {
+        newFile: true,
+        openTerminal: true,
+        copyPath: true,
+        copyName: true
+      }
+    };
+
+    const files = [
+      { name: 'README.md', type: 'DOC' },
+      { name: 'Package.swift', type: 'PKG' },
+      { name: 'Sources', type: 'SRC' },
+      { name: 'Tests', type: 'TST' },
+      { name: 'RESEARCH.md', type: 'DOC' }
+    ];
+
+    let createdFiles = [];
+    let lastFocus = null;
+
+    const text = () => i18n[state.lang];
+    const contextMenu = document.getElementById('context-menu');
+    const actionList = document.getElementById('action-list');
+    const fileList = document.getElementById('file-list');
+    const toast = document.getElementById('toast');
+    const overlay = document.getElementById('sheet-overlay');
+    const fileInput = document.getElementById('file-input');
+    const fileError = document.getElementById('file-error');
+
+    function show(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(show.timer);
+      show.timer = setTimeout(() => toast.classList.remove('show'), 1800);
+    }
+
+    function renderLanguage() {
+      document.documentElement.lang = state.lang === 'zh' ? 'zh-CN' : 'en';
+      const dict = text();
+
+      document.querySelectorAll('[data-i18n]').forEach(node => {
+        const key = node.dataset.i18n;
+        if (dict[key]) node.textContent = dict[key];
+      });
+
+      renderActions();
+      renderMenu();
+    }
+
+    function switchRow(key, label, checked) {
+      return `
+        <div class="action-row">
+          <span class="action-name">${label}</span>
+          <button class="switch" type="button" role="switch" aria-checked="${checked}" aria-label="${label}" data-action="${key}"></button>
+        </div>
+      `;
+    }
+
+    function renderActions() {
+      const labels = text().menuItems;
+      const keys = ['newFile', 'openTerminal', 'copyPath', 'copyName'];
+
+      actionList.innerHTML = keys.map((key, index) => {
+        return switchRow(key, labels[index], state.actions[key]);
+      }).join('');
+    }
+
+    function renderFiles() {
+      fileList.innerHTML = '';
+
+      for (const file of [...files, ...createdFiles]) {
+        const item = document.createElement('div');
+        item.className = 'file' + (createdFiles.includes(file) ? ' new' : '');
+        item.innerHTML = `<span class="file-icon">${file.type}</span><span>${file.name}</span>`;
+        fileList.appendChild(item);
+      }
+    }
+
+    function renderMenu() {
+      contextMenu.innerHTML = '';
+      const labels = text().menuItems;
+      const keys = ['newFile', 'openTerminal', 'copyPath', 'copyName'];
+
+      const enabled = keys
+        .map((key, index) => ({ key, label: labels[index] }))
+        .filter(item => state.actions[item.key]);
+
+      if (enabled.length === 0) {
+        contextMenu.innerHTML = `<div class="menu-item">${state.lang === 'zh' ? '暂无可用动作' : 'No actions enabled'}</div>`;
+        return;
+      }
+
+      if (state.menuMode === 'submenu') {
+        const parent = document.createElement('div');
+        parent.className = 'menu-item parent';
+        parent.innerHTML = `<span>${text().parent}</span><span>▸</span>`;
+        contextMenu.appendChild(parent);
+
+        const sub = document.createElement('div');
+        sub.className = 'menu-sub';
+
+        for (const item of enabled) {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'menu-item';
+          button.textContent = item.label;
+          button.addEventListener('click', () => runAction(item.key));
+          sub.appendChild(button);
+        }
+
+        contextMenu.appendChild(sub);
+      } else {
+        for (const item of enabled) {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'menu-item';
+          button.textContent = item.label;
+          button.addEventListener('click', () => runAction(item.key));
+          contextMenu.appendChild(button);
+        }
+      }
+    }
+
+    function runAction(key) {
+      if (key === 'newFile') {
+        openSheet();
+      } else if (key === 'openTerminal') {
+        show(text().openedTerminal);
+      } else if (key === 'copyPath') {
+        show(text().copiedPath);
+      } else if (key === 'copyName') {
+        show(text().copiedName);
+      }
+    }
+
+    function openSheet() {
+      lastFocus = document.activeElement;
+      fileInput.value = document.getElementById('default-name').value || 'Untitled.txt';
+      fileInput.classList.remove('invalid');
+      fileError.textContent = '';
+      overlay.classList.add('open');
+      fileInput.focus();
+      fileInput.select();
+    }
+
+    function closeSheet() {
+      overlay.classList.remove('open');
+      if (lastFocus) lastFocus.focus();
+    }
+
+    function uniqueName(name) {
+      let result = name;
+      let count = 2;
+
+      while ([...files, ...createdFiles].some(file => file.name === result)) {
+        const dot = result.lastIndexOf('.');
+        result = dot > 0
+          ? `${result.slice(0, dot)} ${count}${result.slice(dot)}`
+          : `${result} ${count}`;
+        count++;
+      }
+
+      return result;
+    }
+
+    document.querySelectorAll('.lang-switch button').forEach(button => {
+      button.addEventListener('click', () => {
+        state.lang = button.dataset.lang;
+        document.querySelectorAll('.lang-switch button').forEach(item => {
+          item.setAttribute('aria-pressed', item === button ? 'true' : 'false');
+        });
+        renderLanguage();
+      });
+    });
+
+    document.querySelectorAll('#menu-mode button').forEach(button => {
+      button.addEventListener('click', () => {
+        state.menuMode = button.dataset.value;
+        document.querySelectorAll('#menu-mode button').forEach(item => {
+          item.setAttribute('aria-pressed', item === button ? 'true' : 'false');
+        });
+        renderMenu();
+      });
+    });
+
+    actionList.addEventListener('click', event => {
+      const control = event.target.closest('.switch');
+      if (!control) return;
+
+      const key = control.dataset.action;
+      state.actions[key] = control.getAttribute('aria-checked') !== 'true';
+      control.setAttribute('aria-checked', state.actions[key] ? 'true' : 'false');
+      renderMenu();
+    });
+
+    document.getElementById('open-extension-settings').addEventListener('click', () => {
+      show(state.lang === 'zh' ? '已打开系统扩展设置' : 'Opened system extension settings');
+    });
+
+    document.getElementById('create-file').addEventListener('click', () => {
+      const value = fileInput.value.trim();
+      fileInput.classList.remove('invalid');
+      fileError.textContent = '';
+
+      if (!value) {
+        fileInput.classList.add('invalid');
+        fileError.textContent = text().invalidEmpty;
+        fileInput.focus();
+        return;
+      }
+
+      if (value.includes('/')) {
+        fileInput.classList.add('invalid');
+        fileError.textContent = text().invalidSlash;
+        fileInput.focus();
+        return;
+      }
+
+      if (value === '.' || value === '..') {
+        fileInput.classList.add('invalid');
+        fileError.textContent = text().invalidDot;
+        fileInput.focus();
+        return;
+      }
+
+      const filename = uniqueName(value);
+      createdFiles.push({ name: filename, type: 'NEW' });
+      renderFiles();
+      closeSheet();
+      show(text().created(filename));
+    });
+
+    document.getElementById('cancel-file').addEventListener('click', closeSheet);
+
+    overlay.addEventListener('click', event => {
+      if (event.target === overlay) closeSheet();
+    });
+
+    fileInput.addEventListener('keydown', event => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        document.getElementById('create-file').click();
+      } else if (event.key === 'Escape') {
+        event.preventDefault();
+        closeSheet();
+      }
+    });
+
+    overlay.addEventListener('keydown', event => {
+      if (event.key !== 'Tab') return;
+
+      const controls = overlay.querySelectorAll('button, input, select, [href], [tabindex]:not([tabindex="-1"])');
+      if (!controls.length) return;
+
+      const first = controls[0];
+      const last = controls[controls.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && overlay.classList.contains('open')) {
+        closeSheet();
+      }
+    });
+
+    renderLanguage();
+    renderFiles();
+  </script>
+</body>
+</html>
