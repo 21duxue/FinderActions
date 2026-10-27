@@ -25,8 +25,13 @@ struct FileCreatorTests {
             .appendingPathComponent("FinderActionsFileCreatorInvalidTests", isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
 
-        #expect(throws: CocoaError.fileWriteInvalidFileName) {
+        do {
             _ = try FileCreator.createFile(in: directory, fileName: "a/b.md")
+            Issue.record("Expected an invalid file name error")
+        } catch let error as CocoaError {
+            #expect(error.code == .fileWriteInvalidFileName)
+        } catch {
+            Issue.record("Unexpected error: \(error)")
         }
 
         try? FileManager.default.removeItem(at: directory)

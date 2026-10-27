@@ -91,6 +91,14 @@ try? FileManager.default.removeItem(at: creatorDirectory)
 try FileManager.default.createDirectory(at: creatorDirectory, withIntermediateDirectories: true)
 let createdFile = try FileCreator.createFile(in: creatorDirectory, fileName: "notes.md")
 expect(createdFile.lastPathComponent == "notes.md", "file creator creates requested file")
+do {
+    _ = try FileCreator.createFile(in: creatorDirectory, fileName: "a/b.md")
+    expect(false, "file creator rejects invalid file names")
+} catch let error as CocoaError {
+    expect(error.code == .fileWriteInvalidFileName, "file creator rejects invalid file names")
+} catch {
+    expect(false, "file creator rejects invalid file names with CocoaError")
+}
 let createdFile2 = try FileCreator.createFile(in: creatorDirectory, fileName: "notes.md")
 expect(createdFile2.lastPathComponent == "notes 2.md", "file creator avoids overwriting")
 try? FileManager.default.removeItem(at: creatorDirectory)
