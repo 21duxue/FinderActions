@@ -2,7 +2,8 @@
 set -euo pipefail
 
 ROOT="${0:A:h:h}"
-VERSION="${1:-0.1.0}"
+VERSION="${1:-0.1.1}"
+export VERSION
 BASE_NAME="FinderActions-v${VERSION}-macOS"
 DIST="$ROOT/dist"
 STAGING="$DIST/$BASE_NAME"

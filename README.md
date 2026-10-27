@@ -27,6 +27,8 @@
   - Group actions under `FinderActions ▸`, or show them directly in Finder's context menu.
 - **Chinese / English interface**
   - Defaults to Chinese.
+- **Menu bar app**
+  - Runs from the menu bar. Launching at login does not open the Settings window.
 - **Launch at login**
   - Optional login-item support using `SMAppService`.
 - **No network access**
@@ -41,21 +43,21 @@
 
 Get the latest build from [Releases](https://github.com/21duxue/FinderActions/releases/latest).
 
-- **Recommended:** `FinderActions-v0.1.0-macOS.dmg`
-- **Alternative:** `FinderActions-v0.1.0-macOS.zip`
+- **Recommended:** `FinderActions-v0.1.1-macOS.dmg`
+- **Alternative:** `FinderActions-v0.1.1-macOS.zip`
 - **Checksums:** `SHA256SUMS.txt`
 
 ## Install
 
 ### DMG
 
-1. Open `FinderActions-v0.1.0-macOS.dmg`.
+1. Open `FinderActions-v0.1.1-macOS.dmg`.
 2. Drag `FinderActions.app` to `Applications`.
 3. Open FinderActions.
 
 ### ZIP
 
-1. Unzip `FinderActions-v0.1.0-macOS.zip`.
+1. Unzip `FinderActions-v0.1.1-macOS.zip`.
 2. Move `FinderActions.app` to `/Applications`.
 3. Open FinderActions.
 

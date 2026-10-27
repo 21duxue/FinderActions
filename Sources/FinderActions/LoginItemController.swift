@@ -3,6 +3,8 @@ import ServiceManagement
 
 @MainActor
 final class LoginItemController: ObservableObject {
+    static let shared = LoginItemController()
+
     @Published var isEnabled: Bool
     @Published var lastError: String?
 

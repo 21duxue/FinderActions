@@ -27,6 +27,8 @@
   - 可以选择折叠到 `FinderActions ▸`，也可以直接显示在 Finder 右键菜单中。
 - **中文 / English**
   - 默认中文。
+- **菜单栏运行**
+  - 常驻菜单栏；登录启动时不会自动打开设置窗口。
 - **登录时启动**
   - 使用 `SMAppService` 注册登录项。
 - **无网络访问**
@@ -41,21 +43,21 @@
 
 前往 [Releases](https://github.com/21duxue/FinderActions/releases/latest) 下载最新版本。
 
-- **推荐：** `FinderActions-v0.1.0-macOS.dmg`
-- **备选：** `FinderActions-v0.1.0-macOS.zip`
+- **推荐：** `FinderActions-v0.1.1-macOS.dmg`
+- **备选：** `FinderActions-v0.1.1-macOS.zip`
 - **校验文件：** `SHA256SUMS.txt`
 
 ## 安装
 
 ### 使用 DMG
 
-1. 打开 `FinderActions-v0.1.0-macOS.dmg`。
+1. 打开 `FinderActions-v0.1.1-macOS.dmg`。
 2. 将 `FinderActions.app` 拖到 `Applications`。
 3. 打开 FinderActions。
 
 ### 使用 ZIP
 
-1. 解压 `FinderActions-v0.1.0-macOS.zip`。
+1. 解压 `FinderActions-v0.1.1-macOS.zip`。
 2. 将 `FinderActions.app` 移动到 `/Applications`。
 3. 打开 FinderActions。
 

@@ -21,7 +21,7 @@ final class SettingsViewModel: ObservableObject {
 
 struct SettingsView: View {
     @ObservedObject var model: SettingsViewModel
-    @StateObject private var loginItem = LoginItemController()
+    @ObservedObject private var loginItem = LoginItemController.shared
 
     var body: some View {
         VStack(spacing: 0) {
@@ -294,8 +294,8 @@ private struct LocalizedStrings {
 
     var launchAtLoginHelp: String {
         language == .chinese
-            ? "让 FinderActions 在主 App 中保持可用。"
-            : "Keep FinderActions available in the main app."
+            ? "在菜单栏运行 FinderActions，不打开设置窗口。"
+            : "Run FinderActions in the menu bar without opening Settings."
     }
 
     var reset: String {

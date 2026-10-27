@@ -4,10 +4,22 @@ import FinderActionsCore
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private var settingsWindow: SettingsWindowController?
+    private var statusBarController: StatusBarController?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        DispatchQueue.main.async { [weak self] in
-            self?.showSettings()
+        statusBarController = StatusBarController(
+            loginItem: LoginItemController.shared,
+            openSettings: { [weak self] in
+                self?.showSettings()
+            }
+        )
+
+        let launchedBefore = UserDefaults.standard.bool(forKey: "hasLaunchedBefore")
+        if !launchedBefore {
+            UserDefaults.standard.set(true, forKey: "hasLaunchedBefore")
+            DispatchQueue.main.async { [weak self] in
+                self?.showSettings()
+            }
         }
     }
 
@@ -24,7 +36,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    private func showSettings() {
+    func showSettings() {
         if settingsWindow == nil {
             settingsWindow = SettingsWindowController()
         }

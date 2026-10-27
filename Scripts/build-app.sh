@@ -3,6 +3,7 @@ set -euo pipefail
 
 ROOT="${0:A:h:h}"
 CONFIGURATION="${1:-release}"
+VERSION="${VERSION:-0.1.1}"
 BUILD_DIR="$ROOT/.build/$CONFIGURATION"
 APP_NAME="FinderActions"
 APP_BUNDLE="$ROOT/build/$APP_NAME.app"
@@ -41,7 +42,7 @@ xcrun swiftc \
   "$ROOT/.build/out/Products/${(C)CONFIGURATION}/libFinderActionsCore.a" \
   -o "$EXTENSION_BUNDLE/Contents/MacOS/$EXTENSION_NAME"
 
-cat > "$APP_BUNDLE/Contents/Info.plist" <<'PLIST'
+cat > "$APP_BUNDLE/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -72,18 +73,20 @@ cat > "$APP_BUNDLE/Contents/Info.plist" <<'PLIST'
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>0.1.0</string>
+    <string>${VERSION}</string>
     <key>CFBundleVersion</key>
     <string>1</string>
     <key>LSMinimumSystemVersion</key>
     <string>13.0</string>
+    <key>LSUIElement</key>
+    <true/>
     <key>NSPrincipalClass</key>
     <string>NSApplication</string>
 </dict>
 </plist>
 PLIST
 
-cat > "$EXTENSION_BUNDLE/Contents/Info.plist" <<'PLIST'
+cat > "$EXTENSION_BUNDLE/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -101,7 +104,7 @@ cat > "$EXTENSION_BUNDLE/Contents/Info.plist" <<'PLIST'
     <key>CFBundlePackageType</key>
     <string>XPC!</string>
     <key>CFBundleShortVersionString</key>
-    <string>0.1.0</string>
+    <string>${VERSION}</string>
     <key>CFBundleVersion</key>
     <string>1</string>
     <key>NSExtension</key>

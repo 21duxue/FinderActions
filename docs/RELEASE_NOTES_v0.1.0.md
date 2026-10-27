@@ -13,6 +13,7 @@ Initial public release.
 - Per-action switches
 - Default file name
 - Finder extension status and settings shortcut
+- Menu bar app mode
 - Launch at login
 - App icon
 
