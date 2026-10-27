@@ -6,17 +6,13 @@ cd "$ROOT"
 
 CONFIGURATION="${1:-release}"
 VERSION="${VERSION:-0.1.3}"
-BIN_DIR="$(swift build -c "$CONFIGURATION" --show-bin-path)"
 APP_NAME="FinderActions"
 APP_BUNDLE="$ROOT/build/$APP_NAME.app"
 EXTENSION_NAME="FinderActionsExtension"
 EXTENSION_BUNDLE="$APP_BUNDLE/Contents/PlugIns/$EXTENSION_NAME.appex"
 
 swift build -c "$CONFIGURATION"
-swift build -c "$CONFIGURATION" --target FinderActionsCore
-
-SDK="$(xcrun --sdk macosx --show-sdk-path)"
-TARGET="$(uname -m)-apple-macos13.0"
+BIN_DIR="$(swift build -c "$CONFIGURATION" --show-bin-path)"
 
 rm -rf "$APP_BUNDLE"
 mkdir -p "$APP_BUNDLE/Contents/MacOS"
@@ -25,24 +21,7 @@ cp "$ROOT/Resources/AppIcon.icns" "$APP_BUNDLE/Contents/Resources/AppIcon.icns"
 mkdir -p "$EXTENSION_BUNDLE/Contents/MacOS"
 
 cp "$BIN_DIR/$APP_NAME" "$APP_BUNDLE/Contents/MacOS/$APP_NAME"
-
-xcrun swiftc \
-  -swift-version 5 \
-  -O \
-  -sdk "$SDK" \
-  -target "$TARGET" \
-  -module-name "$EXTENSION_NAME" \
-  -parse-as-library \
-  -application-extension \
-  -I "$BIN_DIR" \
-  -L "$BIN_DIR" \
-  -framework Cocoa \
-  -framework FinderSync \
-  -Xlinker -e \
-  -Xlinker _NSExtensionMain \
-  "$ROOT/Sources/$EXTENSION_NAME"/*.swift \
-  "$BIN_DIR/libFinderActionsCore.a" \
-  -o "$EXTENSION_BUNDLE/Contents/MacOS/$EXTENSION_NAME"
+cp "$BIN_DIR/$EXTENSION_NAME" "$EXTENSION_BUNDLE/Contents/MacOS/$EXTENSION_NAME"
 
 cat > "$APP_BUNDLE/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
