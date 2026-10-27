@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT="${0:A:h:h}"
 CONFIGURATION="${1:-release}"
-VERSION="${VERSION:-0.1.1}"
+VERSION="${VERSION:-0.1.2}"
 BUILD_DIR="$ROOT/.build/$CONFIGURATION"
 APP_NAME="FinderActions"
 APP_BUNDLE="$ROOT/build/$APP_NAME.app"

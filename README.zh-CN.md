@@ -43,21 +43,21 @@
 
 前往 [Releases](https://github.com/21duxue/FinderActions/releases/latest) 下载最新版本。
 
-- **推荐：** `FinderActions-v0.1.1-macOS.dmg`
-- **备选：** `FinderActions-v0.1.1-macOS.zip`
+- **推荐：** `FinderActions-v0.1.2-macOS.dmg`
+- **备选：** `FinderActions-v0.1.2-macOS.zip`
 - **校验文件：** `SHA256SUMS.txt`
 
 ## 安装
 
 ### 使用 DMG
 
-1. 打开 `FinderActions-v0.1.1-macOS.dmg`。
+1. 打开 `FinderActions-v0.1.2-macOS.dmg`。
 2. 将 `FinderActions.app` 拖到 `Applications`。
 3. 打开 FinderActions。
 
 ### 使用 ZIP
 
-1. 解压 `FinderActions-v0.1.1-macOS.zip`。
+1. 解压 `FinderActions-v0.1.2-macOS.zip`。
 2. 将 `FinderActions.app` 移动到 `/Applications`。
 3. 打开 FinderActions。
 

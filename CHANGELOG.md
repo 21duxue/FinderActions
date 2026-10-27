@@ -33,3 +33,8 @@ Initial public release.
 - Added menu bar actions for opening Settings, toggling launch at login, and quitting.
 - Improved Finder menu preference sharing.
 - Added more unit and smoke tests.
+
+## v0.1.2
+
+- Fixed the Dock icon still appearing when running as a menu bar app.
+- FinderActions now uses accessory activation policy and remains visible only in the menu bar.

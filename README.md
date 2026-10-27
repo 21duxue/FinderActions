@@ -43,21 +43,21 @@
 
 Get the latest build from [Releases](https://github.com/21duxue/FinderActions/releases/latest).
 
-- **Recommended:** `FinderActions-v0.1.1-macOS.dmg`
-- **Alternative:** `FinderActions-v0.1.1-macOS.zip`
+- **Recommended:** `FinderActions-v0.1.2-macOS.dmg`
+- **Alternative:** `FinderActions-v0.1.2-macOS.zip`
 - **Checksums:** `SHA256SUMS.txt`
 
 ## Install
 
 ### DMG
 
-1. Open `FinderActions-v0.1.1-macOS.dmg`.
+1. Open `FinderActions-v0.1.2-macOS.dmg`.
 2. Drag `FinderActions.app` to `Applications`.
 3. Open FinderActions.
 
 ### ZIP
 
-1. Unzip `FinderActions-v0.1.1-macOS.zip`.
+1. Unzip `FinderActions-v0.1.2-macOS.zip`.
 2. Move `FinderActions.app` to `/Applications`.
 3. Open FinderActions.
 
