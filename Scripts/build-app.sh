@@ -14,6 +14,11 @@ EXTENSION_BUNDLE="$APP_BUNDLE/Contents/PlugIns/$EXTENSION_NAME.appex"
 swift build -c "$CONFIGURATION"
 BIN_DIR="$(swift build -c "$CONFIGURATION" --show-bin-path)"
 
+SDK="$(xcrun --sdk macosx --show-sdk-path)"
+TARGET="$(uname -m)-apple-macos13.0"
+EXT_SRC_DIR="$(mktemp -d)"
+trap 'rm -rf "$EXT_SRC_DIR"' EXIT
+
 rm -rf "$APP_BUNDLE"
 mkdir -p "$APP_BUNDLE/Contents/MacOS"
 mkdir -p "$APP_BUNDLE/Contents/Resources"
@@ -21,7 +26,26 @@ cp "$ROOT/Resources/AppIcon.icns" "$APP_BUNDLE/Contents/Resources/AppIcon.icns"
 mkdir -p "$EXTENSION_BUNDLE/Contents/MacOS"
 
 cp "$BIN_DIR/$APP_NAME" "$APP_BUNDLE/Contents/MacOS/$APP_NAME"
-cp "$BIN_DIR/$EXTENSION_NAME" "$EXTENSION_BUNDLE/Contents/MacOS/$EXTENSION_NAME"
+
+for source in "$ROOT/Sources/$EXTENSION_NAME"/*.swift; do
+  sed '/^[[:space:]]*import FinderActionsCore[[:space:]]*$/d' "$source" > "$EXT_SRC_DIR/${source:t}"
+done
+
+xcrun swiftc \
+  -swift-version 5 \
+  -O \
+  -sdk "$SDK" \
+  -target "$TARGET" \
+  -module-name "$EXTENSION_NAME" \
+  -parse-as-library \
+  -application-extension \
+  -framework Cocoa \
+  -framework FinderSync \
+  -Xlinker -e \
+  -Xlinker _NSExtensionMain \
+  "$EXT_SRC_DIR"/*.swift \
+  "$ROOT/Sources/FinderActionsCore"/*.swift \
+  -o "$EXTENSION_BUNDLE/Contents/MacOS/$EXTENSION_NAME"
 
 cat > "$APP_BUNDLE/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>

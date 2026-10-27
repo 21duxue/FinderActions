@@ -20,12 +20,8 @@ let package = Package(
         .executableTarget(
             name: "FinderActionsExtension",
             dependencies: ["FinderActionsCore"],
-            swiftSettings: [
-                .unsafeFlags(["-parse-as-library", "-application-extension"])
-            ],
             linkerSettings: [
-                .linkedFramework("FinderSync"),
-                .unsafeFlags(["-Xlinker", "-e", "-Xlinker", "_NSExtensionMain"])
+                .linkedFramework("FinderSync")
             ]
         ),
         .testTarget(name: "FinderActionsCoreTests", dependencies: ["FinderActionsCore"])
